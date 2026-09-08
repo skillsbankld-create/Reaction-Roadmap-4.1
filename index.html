@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reaction Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#080828;
+    --navy-soft:#12123f;
+    --white:#ffffff;
+    --paper:#EBF4FF;
+    --paper-line:#d7e6fb;
+    --blue:#4D88E8;
+    --blue-deep:#3a6fca;
+    --teal:#40BDA9;
+    --orange:#FFBC3A;
+    --coral:#F26A44;
+    --ink:#1c2140;
+    --ink-soft:#565b7d;
+    --line:#e2e6f0;
+    --serif:'Newsreader', Georgia, serif;
+    --sans:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--sans);
+    color:var(--ink);
+    background:var(--white);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  .app{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- Screens ---------- */
+  .screen{
+    display:none;
+    flex:1;
+    width:100%;
+  }
+  .screen.active{
+    display:flex;
+    flex-direction:column;
+    animation:screenIn 420ms ease;
+  }
+  @keyframes screenIn{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* ---------- Persistent brand header (every screen) ---------- */
+  .global-header{
+    background:var(--navy);
+    color:var(--white);
+    padding:18px 32px;
+    display:flex;
+    align-items:center;
+    flex-shrink:0;
+    border-bottom:3px solid var(--teal);
+  }
+  .global-header img{
+    height:28px;
+    width:auto;
+    display:block;
+  }
+
+  /* ---------- Opening screen ---------- */
+  .opening-body{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:64px 24px;
+    background:
+      radial-gradient(circle at 82% 12%, rgba(77,136,232,0.08), transparent 45%),
+      radial-gradient(circle at 10% 90%, rgba(64,189,169,0.07), transparent 45%);
+  }
+  .opening-card{
+    max-width:560px;
+    width:100%;
+    text-align:left;
+  }
+  .eyebrow-line{
+    width:44px;
+    height:3px;
+    background:var(--coral);
+    margin-bottom:22px;
+  }
+  h1.title{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(2.2rem, 4.4vw, 3rem);
+    line-height:1.12;
+    margin:0 0 20px 0;
+    color:var(--navy);
+  }
+  .lede{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.2rem;
+    color:var(--ink-soft);
+    margin:0 0 28px 0;
+    line-height:1.5;
+  }
+  .instructions{
+    font-size:1rem;
+    color:var(--ink);
+    margin:0 0 8px 0;
+  }
+  .instructions p{margin:0 0 12px 0;}
+  .instructions p:last-child{margin-bottom:0;}
+
+  .btn{
+    font-family:var(--sans);
+    font-size:1rem;
+    font-weight:600;
+    border:none;
+    cursor:pointer;
+    padding:14px 30px;
+    border-radius:3px;
+    transition:transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  }
+  .btn-primary{
+    background:var(--navy);
+    color:var(--white);
+  }
+  .btn-primary:hover{
+    background:var(--blue-deep);
+    transform:translateY(-1px);
+    box-shadow:0 8px 20px rgba(77,136,232,0.28);
+  }
+  .btn-ghost{
+    background:transparent;
+    color:var(--navy);
+    border:1.5px solid var(--line);
+  }
+  .btn-ghost:hover{
+    border-color:var(--blue);
+    color:var(--blue-deep);
+  }
+
+  .start-row{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    margin-top:32px;
+    flex-wrap:wrap;
+  }
+  .meta-tag{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    letter-spacing:0.01em;
+  }
+
+  /* ---------- Progress ---------- */
+  .progress-shell{
+    background:var(--white);
+    border-bottom:1px solid var(--line);
+    padding:20px 32px 0 32px;
+  }
+  .progress-inner{
+    max-width:680px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-bottom:14px;
+  }
+  .situation-label{
+    font-size:0.82rem;
+    font-weight:600;
+    letter-spacing:0.04em;
+    color:var(--ink-soft);
+  }
+  .progress-track{
+    height:3px;
+    background:var(--line);
+    max-width:680px;
+    margin:0 auto;
+    position:relative;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--blue), var(--teal));
+    transition:width 420ms ease;
+  }
+
+  /* ---------- Scenario screen ---------- */
+  .scenario-wrap{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    padding:48px 24px 64px 24px;
+  }
+  .scenario-inner{
+    max-width:680px;
+    width:100%;
+  }
+  .role-tag{
+    display:inline-block;
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.03em;
+    color:var(--blue-deep);
+    background:var(--paper);
+    padding:5px 12px;
+    border-radius:3px;
+    margin-bottom:18px;
+  }
+  .scenario-title{
+    font-family:var(--serif);
+    font-size:1.5rem;
+    font-weight:500;
+    color:var(--navy);
+    margin:0 0 22px 0;
+    line-height:1.3;
+  }
+  .dialogue-panel{
+    background:var(--paper);
+    border-left:3px solid var(--teal);
+    padding:26px 28px;
+    margin-bottom:36px;
+  }
+  .dialogue-text{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.2rem;
+    color:var(--ink);
+    margin:0;
+    line-height:1.55;
+  }
+  .prompt-line{
+    font-size:0.95rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin:0 0 18px 0;
+  }
+  .responses{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .resp-card{
+    text-align:left;
+    background:var(--white);
+    border:1.5px solid var(--line);
+    padding:18px 20px;
+    border-radius:3px;
+    font-family:var(--sans);
+    font-size:0.98rem;
+    color:var(--ink);
+    cursor:pointer;
+    transition:border-color 160ms ease, background 160ms ease, transform 160ms ease;
+    line-height:1.5;
+  }
+  .resp-card:hover{
+    border-color:var(--blue);
+    background:#fbfdff;
+    transform:translateX(2px);
+  }
+  .resp-card.selected{
+    border-color:var(--teal);
+    border-width:2px;
+    background:#f2fbf9;
+  }
+  .resp-card:disabled,
+  .resp-card[disabled]{
+    cursor:default;
+    opacity:1;
+  }
+  .resp-card.dim{
+    opacity:0.45;
+  }
+
+  /* ---------- Outcome screen ---------- */
+  .outcome-wrap{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    padding:56px 24px 64px 24px;
+  }
+  .outcome-inner{
+    max-width:600px;
+    width:100%;
+  }
+  .oc-label{
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.04em;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .oc-quote{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.15rem;
+    color:var(--navy);
+    margin:0 0 30px 0;
+    padding-bottom:26px;
+    border-bottom:1px solid var(--line);
+    line-height:1.5;
+  }
+  .oc-consequence{
+    font-size:1.02rem;
+    color:var(--ink);
+    margin:0 0 30px 0;
+    line-height:1.6;
+  }
+  .indicator{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 16px;
+    border-radius:3px;
+    font-size:0.9rem;
+    font-weight:600;
+    margin-bottom:38px;
+  }
+  .indicator .dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    display:inline-block;
+  }
+  .indicator.plus{ background:rgba(64,189,169,0.12); color:#1f7566; }
+  .indicator.plus .dot{ background:var(--teal); }
+  .indicator.hold{ background:rgba(255,188,58,0.15); color:#8a6710; }
+  .indicator.hold .dot{ background:var(--orange); }
+  .indicator.minus{ background:rgba(242,106,68,0.12); color:#b8451f; }
+  .indicator.minus .dot{ background:var(--coral); }
+
+  #oc-indicator{
+    min-height:41px;
+    margin-bottom:38px;
+  }
+  #oc-indicator .indicator{
+    margin-bottom:0;
+    opacity:0;
+  }
+  #oc-indicator.revealed .indicator{
+    animation:fadeUp 380ms ease forwards;
+  }
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(4px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  #btn-next{
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 320ms ease;
+  }
+  #btn-next.revealed{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  /* ---------- Results screen ---------- */
+  .results-wrap{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    padding:8px 24px 72px 24px;
+  }
+  .results-inner{
+    max-width:640px;
+    width:100%;
+    padding-top:48px;
+  }
+  h2.results-title{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:2rem;
+    color:var(--navy);
+    margin:0 0 6px 0;
+  }
+  .results-sub{
+    font-size:0.95rem;
+    color:var(--ink-soft);
+    margin:0 0 36px 0;
+  }
+  .stats-row{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:14px;
+    margin-bottom:20px;
+  }
+  .stat-card{
+    border-radius:3px;
+    padding:18px 16px;
+    text-align:left;
+  }
+  .stat-card.plus{ background:rgba(64,189,169,0.12); }
+  .stat-card.hold{ background:rgba(255,188,58,0.16); }
+  .stat-card.minus{ background:rgba(242,106,68,0.12); }
+  .stat-num{
+    font-family:var(--serif);
+    font-size:1.9rem;
+    line-height:1;
+    margin-bottom:6px;
+  }
+  .stat-card.plus .stat-num{ color:#1f7566; }
+  .stat-card.hold .stat-num{ color:#8a6710; }
+  .stat-card.minus .stat-num{ color:#b8451f; }
+  .stat-label{
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  .score-line{
+    font-size:0.95rem;
+    color:var(--ink-soft);
+    margin:4px 0 36px 0;
+    padding-top:16px;
+    border-top:1px solid var(--line);
+  }
+  .score-line strong{
+    color:var(--navy);
+  }
+  .interpretation{
+    background:var(--white);
+    border:1.5px solid var(--line);
+    border-left:3px solid var(--blue);
+    padding:22px 24px;
+    font-size:1rem;
+    line-height:1.65;
+    color:var(--ink);
+    margin-bottom:44px;
+  }
+  .reflect-block{
+    margin-bottom:20px;
+  }
+  .reflect-q{
+    font-weight:600;
+    font-size:0.98rem;
+    color:var(--navy);
+    margin:0 0 10px 0;
+  }
+  textarea.reflect-input{
+    width:100%;
+    min-height:70px;
+    font-family:var(--sans);
+    font-size:0.95rem;
+    color:var(--ink);
+    border:1.5px solid var(--line);
+    border-radius:3px;
+    padding:12px 14px;
+    resize:vertical;
+  }
+  textarea.reflect-input:focus{
+    outline:none;
+    border-color:var(--blue);
+  }
+  .results-actions{
+    display:flex;
+    gap:14px;
+    margin-top:36px;
+    flex-wrap:wrap;
+  }
+
+  /* ---------- Review screen ---------- */
+  .review-wrap{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    padding:48px 24px 72px 24px;
+  }
+  .review-inner{
+    max-width:680px;
+    width:100%;
+  }
+  .review-item{
+    padding:24px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .review-item:first-child{padding-top:0;}
+  .review-num{
+    font-size:0.78rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    letter-spacing:0.03em;
+    margin-bottom:8px;
+  }
+  .review-dialogue{
+    font-family:var(--serif);
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:0.95rem;
+    margin:0 0 10px 0;
+  }
+  .review-chosen{
+    font-size:0.98rem;
+    color:var(--navy);
+    font-weight:500;
+    margin:0 0 8px 0;
+  }
+  .review-consequence{
+    font-size:0.92rem;
+    color:var(--ink-soft);
+    margin:0 0 10px 0;
+  }
+  .back-row{
+    margin-top:36px;
+  }
+
+  @media (max-width:560px){
+    .global-header{padding:14px 20px;}
+    .opening-body{padding:48px 20px;}
+    .scenario-wrap, .outcome-wrap, .review-wrap{padding-left:20px; padding-right:20px;}
+    .progress-shell{padding-left:20px; padding-right:20px;}
+    .stats-row{grid-template-columns:1fr 1fr 1fr; gap:8px;}
+    .stat-num{font-size:1.5rem;}
+    .stat-card{padding:14px 10px;}
+    .results-actions{flex-direction:column;}
+    .btn{width:100%; text-align:center;}
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="global-header">
+    <img src="data:image/png;base64,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" alt="Skills Bank">
+  </div>
+
+  <!-- SCREEN 1: OPENING -->
+  <section class="screen active" id="screen-opening">    <div class="opening-body">
+      <div class="opening-card">
+        <div class="eyebrow-line"></div>
+        <h1 class="title">Reaction Roadmap</h1>
+        <p class="lede">Pressure creates an impulse.<br>Your response creates the outcome.</p>
+        <div class="instructions">
+          <p>You will face 10 workplace situations.</p>
+          <p>For each one, choose the response you would be most likely to use in the moment.</p>
+          <p>There may be more than one response that sounds reasonable. Focus on what the response is likely to create next.</p>
+        </div>
+        <div class="start-row">
+          <button class="btn btn-primary" id="btn-start">Start</button>
+          <span class="meta-tag">10 situations · approximately 8–10 minutes</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 2: SCENARIO -->
+  <section class="screen" id="screen-scenario">
+    <div class="progress-shell">
+      <div class="progress-inner">
+        <span class="situation-label" id="situation-label">Situation 01 / 10</span>
+      </div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:10%"></div></div>
+    <div class="scenario-wrap">
+      <div class="scenario-inner">
+        <span class="role-tag" id="role-tag">Employee</span>
+        <h2 class="scenario-title" id="scenario-title">Scenario title</h2>
+        <div class="dialogue-panel">
+          <p class="dialogue-text" id="dialogue-text">Dialogue goes here.</p>
+        </div>
+        <p class="prompt-line">How would you respond?</p>
+        <div class="responses" id="responses-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 3: OUTCOME -->
+  <section class="screen" id="screen-outcome">
+    <div class="progress-shell">
+      <div class="progress-inner">
+        <span class="situation-label" id="situation-label-outcome">Situation 01 / 10</span>
+      </div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill-outcome" style="width:10%"></div></div>
+    <div class="outcome-wrap">
+      <div class="outcome-inner">
+        <div class="oc-label">You chose</div>
+        <p class="oc-quote" id="oc-chosen">Chosen response text.</p>
+        <div class="oc-label">What happens next</div>
+        <p class="oc-consequence" id="oc-consequence">Consequence text.</p>
+        <div id="oc-indicator"></div>
+        <div>
+          <button class="btn btn-primary" id="btn-next">Next Situation</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 4: RESULTS -->
+  <section class="screen" id="screen-results">    <div class="results-wrap">
+      <div class="results-inner">
+        <h2 class="results-title">Your Reaction Roadmap</h2>
+        <p class="results-sub">10 decisions completed</p>
+
+        <div class="stats-row">
+          <div class="stat-card plus">
+            <div class="stat-num" id="count-plus">0</div>
+            <div class="stat-label">Constructive Responses</div>
+          </div>
+          <div class="stat-card hold">
+            <div class="stat-num" id="count-hold">0</div>
+            <div class="stat-label">Holding Responses</div>
+          </div>
+          <div class="stat-card minus">
+            <div class="stat-num" id="count-minus">0</div>
+            <div class="stat-label">Escalating Responses</div>
+          </div>
+        </div>
+
+        <p class="score-line">Decision Score: <strong id="score-value">0 / 10</strong></p>
+
+        <div class="interpretation" id="interpretation-text"></div>
+
+        <div class="reflect-block">
+          <p class="reflect-q">Which situation was hardest for you to judge?</p>
+          <textarea class="reflect-input" placeholder="Write a short note (optional)"></textarea>
+        </div>
+        <div class="reflect-block">
+          <p class="reflect-q">What made the stronger response difficult to choose in that moment?</p>
+          <textarea class="reflect-input" placeholder="Write a short note (optional)"></textarea>
+        </div>
+
+        <div class="results-actions">
+          <button class="btn btn-ghost" id="btn-review">Review My Decisions</button>
+          <button class="btn btn-primary" id="btn-restart">Restart Activity</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 5: REVIEW -->
+  <section class="screen" id="screen-review">    <div class="review-wrap">
+      <div class="review-inner">
+        <h2 class="results-title" style="margin-bottom:28px;">Review My Decisions</h2>
+        <div id="review-list"></div>
+        <div class="back-row">
+          <button class="btn btn-ghost" id="btn-back-results">Back to Summary</button>
+          <button class="btn btn-primary" id="btn-restart-2" style="margin-left:12px;">Restart Activity</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+
+  // ---------- SCENARIO DATA ----------
+  // score: +1 constructive, 0 holding, -1 escalating
+  const SCENARIOS = [
+    {
+      id:1,
+      title:"Performance Feedback to a Team Member",
+      role:"Employee",
+      dialogue:"Honestly, I've been trying my best, but it feels like I'm always being watched closely here.",
+      responses:[
+        {text:"I appreciate your honesty, but results are results. We cannot lower our standards.", score:-1, consequence:"Employee becomes increasingly anxious; performance further declines."},
+        {text:"Maybe we can look at expectations again later, if you are this stressed.", score:0, consequence:"Issue temporarily defused but not resolved; performance stays inconsistent."},
+        {text:"The standard needs to stay the same. Let's find out exactly which part is hardest for you, so I can help with that first.", score:1, consequence:"You identify one specific problem area together, and agree on direct support for it."}
+      ]
+    },
+    {
+      id:2,
+      title:"Peer Manager Missing Deadlines",
+      role:"Peer Manager",
+      dialogue:"Sorry, we are late again. There is a lot going on right now.",
+      responses:[
+        {text:"I understand, we are all busy. Maybe we can find a way around it.", score:0, consequence:"Problem persists; your team grows increasingly resentful."},
+        {text:"If this happens again, we will need to report it. Let's hope that will not be needed.", score:-1, consequence:"Peer manager feels threatened; tension escalates."},
+        {text:"This has happened more than once now. Let's agree on a new deadline and a clear way to tell me early if you are running late.", score:1, consequence:"Peer manager agrees to a new deadline and a clear way to flag delays early."}
+      ]
+    },
+    {
+      id:3,
+      title:"Senior Manager Challenges You Publicly",
+      role:"Senior Manager",
+      dialogue:"I'm not sure your team's plan really fits our overall goals here.",
+      responses:[
+        {text:"I'm sure our plan is right, but we can talk about this in private if you like.", score:0, consequence:"Senior manager feels subtly dismissed; tension continues."},
+        {text:"This plan was already approved. I don't know why we are talking about it again.", score:-1, consequence:"Senior manager perceives resistance, causing strained future interactions."},
+        {text:"Can you tell me which part does not fit? I want to fix the right thing.", score:1, consequence:"Senior manager names the exact concern; the conversation moves toward solving it."}
+      ]
+    },
+    {
+      id:4,
+      title:"Cross-Departmental Collaboration Issue",
+      role:"Operations Manager",
+      dialogue:"We have looked at your ideas many times already. They do not work for our process.",
+      responses:[
+        {text:"If your team will not accept these changes, I do not know how we can move forward.", score:-1, consequence:"Operations feels confronted; collaboration deteriorates further."},
+        {text:"Okay, let's stop here for now and come back to it later.", score:0, consequence:"Issue remains unresolved; efficiency continues to suffer."},
+        {text:"Let's go through the specific points that don't work and fix them together.", score:1, consequence:"Operations names the real problems, and both teams start building a solution that works."}
+      ]
+    },
+    {
+      id:5,
+      title:"Budget Negotiation with Finance",
+      role:"Finance Manager",
+      dialogue:"I understand you need more money, but our budget is very limited.",
+      responses:[
+        {text:"Without more money, we will miss important deadlines. I hope you understand what that means.", score:-1, consequence:"Finance feels pressured, resisting future requests more firmly."},
+        {text:"Okay, we will try to manage this on our own for now.", score:0, consequence:"Budget remains constrained; your team's performance is compromised."},
+        {text:"We can delay the lower priority items and keep funding for the top priority now.", score:1, consequence:"Finance agrees to fund the top priority now, and the rest is reviewed next quarter."}
+      ]
+    },
+    {
+      id:6,
+      title:"Unrealistic Deadline Request",
+      role:"Peer Manager",
+      dialogue:"We need your team to finish early this month; our client demands it.",
+      responses:[
+        {text:"Absolutely not; we already set the timeline.", score:-1, consequence:"The peer manager feels attacked and escalates the issue to senior management. Collaboration worsens, and your team feels pressure from above to deliver early despite tensions."},
+        {text:"Fine, we'll see what we can do.", score:0, consequence:"Your team attempts to meet the unrealistic deadline without adequate resources or support, resulting in burnout and decreased work quality."},
+        {text:"This is tight, but possible. Let's agree on what extra help your team can give so we meet it without cutting quality.", score:1, consequence:"Your peer manager agrees to share extra help for a short time, so both teams succeed without losing quality."}
+      ]
+    },
+    {
+      id:7,
+      title:"Senior Manager's Ambiguous Feedback",
+      role:"Senior Manager",
+      dialogue:"Your team's results could be better. I expected more.",
+      responses:[
+        {text:"I'm surprised by this. Our numbers look strong.", score:-1, consequence:"Your senior manager sees you as defensive. They talk to you less in future meetings, and expectations stay unclear."},
+        {text:"Understood, we'll try harder next time.", score:0, consequence:"Your team keeps working without clear direction. Effort goes in different directions, and expectations stay unclear."},
+        {text:"I want to know exactly which part fell short, so we fix the right thing.", score:1, consequence:"The senior manager names the exact areas to improve, giving your team clear, focused goals."}
+      ]
+    },
+    {
+      id:8,
+      title:"Team Member Becomes Defensive",
+      role:"Employee",
+      dialogue:"You're always critical. It's impossible to satisfy your expectations.",
+      responses:[
+        {text:"That's not true. Maybe you should look again at your own effort.", score:-1, consequence:"The employee pulls back further. They talk less and lose interest in the work, and the team's output drops."},
+        {text:"I'm sorry you feel that way. We'll discuss later.", score:0, consequence:"The problem stays unresolved. The employee's low performance continues, and it affects the whole team."},
+        {text:"Let's put the criticism aside for a moment. Tell me which specific expectation feels out of reach.", score:1, consequence:"The employee names a specific struggle, opening the door to real support and better performance."}
+      ]
+    },
+    {
+      id:9,
+      title:"Resource Allocation Conflict",
+      role:"Other Department Manager",
+      dialogue:"I can't spare resources now; maybe next quarter.",
+      responses:[
+        {text:"This is unacceptable; you're always delaying.", score:-1, consequence:"The other manager refuses to help in the future. This creates ongoing tension that slows down both teams."},
+        {text:"Fine, we'll manage without your support.", score:0, consequence:"You continue without resources. This causes real delays, and your team becomes frustrated."},
+        {text:"Resources are tight on both sides. What could we shift or delay to cover the most urgent need?", score:1, consequence:"You find resources or a new timeline together, and this becomes a model for future cooperation."}
+      ]
+    },
+    {
+      id:10,
+      title:"Inconsistent Peer Commitment",
+      role:"Peer",
+      dialogue:"Sorry I missed our meeting again. I was busy with something else.",
+      responses:[
+        {text:"This is becoming a pattern; it's frustrating.", score:-1, consequence:"Your peer becomes defensive. You talk less, the relationship gets strained, and the project suffers."},
+        {text:"No worries, we'll catch up later.", score:0, consequence:"Meetings keep getting missed. This causes ongoing delays and frustration in your team."},
+        {text:"This has happened twice now. I need a meeting time that works for both of us, and I need you to confirm it in advance.", score:1, consequence:"You agree on a fixed time and a way to confirm it. Attendance and trust both improve."}
+      ]
+    }
+  ];
+
+  const CLASS_LABEL = {1:"Constructive Response", 0:"Holding Response", "-1":"Escalating Reaction"};
+
+  // ---------- STATE ----------
+  let order = [];       // shuffled scenario sequence (kept as original order per spec, but responses shuffle)
+  let current = 0;
+  let answers = [];     // {scenarioId, title, dialogue, chosenText, score, consequence}
+  let shuffledResponsesCache = []; // per scenario index, the shuffled responses array
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+
+  function initRun(){
+    order = SCENARIOS.slice(); // scenario sequence stays 1-10 in order (situations, not shuffled)
+    current = 0;
+    answers = [];
+    shuffledResponsesCache = order.map(sc => shuffle(sc.responses));
+  }
+
+  // ---------- SCREEN CONTROL ----------
+  function showScreen(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  // ---------- RENDER SCENARIO ----------
+  function renderScenario(){
+    const sc = order[current];
+    const num = current + 1;
+    document.getElementById('situation-label').textContent = 'Situation ' + String(num).padStart(2,'0') + ' / 10';
+    document.getElementById('progress-fill').style.width = (num/10*100) + '%';
+    document.getElementById('role-tag').textContent = sc.role;
+    document.getElementById('scenario-title').textContent = sc.title;
+    document.getElementById('dialogue-text').textContent = sc.dialogue;
+
+    const list = document.getElementById('responses-list');
+    list.innerHTML = '';
+    const resp = shuffledResponsesCache[current];
+    resp.forEach((r, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'resp-card';
+      btn.type = 'button';
+      btn.textContent = r.text;
+      btn.addEventListener('click', () => handleChoice(idx));
+      list.appendChild(btn);
+    });
+
+    showScreen('screen-scenario');
+  }
+
+  function handleChoice(idx){
+    const sc = order[current];
+    const resp = shuffledResponsesCache[current];
+    const chosen = resp[idx];
+
+    // lock all cards, mark selection, dim others
+    const cards = document.querySelectorAll('#responses-list .resp-card');
+    cards.forEach((c, i) => {
+      c.disabled = true;
+      if(i === idx){ c.classList.add('selected'); }
+      else { c.classList.add('dim'); }
+    });
+
+    answers.push({
+      scenarioId: sc.id,
+      title: sc.title,
+      dialogue: sc.dialogue,
+      chosenText: chosen.text,
+      score: chosen.score,
+      consequence: chosen.consequence
+    });
+
+    setTimeout(() => renderOutcome(), 550);
+  }
+
+  function renderOutcome(){
+    const num = current + 1;
+    const a = answers[answers.length - 1];
+
+    document.getElementById('situation-label-outcome').textContent = 'Situation ' + String(num).padStart(2,'0') + ' / 10';
+    document.getElementById('progress-fill-outcome').style.width = (num/10*100) + '%';
+    document.getElementById('oc-chosen').textContent = a.chosenText;
+    document.getElementById('oc-consequence').textContent = a.consequence;
+
+    // Impact is shown first. Classification and score are revealed a beat later.
+    const indicatorWrap = document.getElementById('oc-indicator');
+    indicatorWrap.innerHTML = '';
+    indicatorWrap.classList.remove('revealed');
+
+    const btnNext = document.getElementById('btn-next');
+    btnNext.textContent = (current === order.length - 1) ? 'See Results' : 'Next Situation';
+    btnNext.classList.remove('revealed');
+
+    showScreen('screen-outcome');
+
+    let cls = 'plus', label = 'Constructive Response';
+    if(a.score === 0){ cls = 'hold'; label = 'Holding Response'; }
+    if(a.score === -1){ cls = 'minus'; label = 'Escalating Reaction'; }
+    const sign = a.score === 1 ? '+1' : (a.score === 0 ? '0' : '−1');
+
+    setTimeout(() => {
+      indicatorWrap.innerHTML = '<div class="indicator ' + cls + '"><span class="dot"></span>' + sign + ' ' + label + '</div>';
+      indicatorWrap.classList.add('revealed');
+      btnNext.classList.add('revealed');
+    }, 650);
+  }
+
+  function goNext(){
+    if(current === order.length - 1){
+      renderResults();
+    } else {
+      current++;
+      renderScenario();
+    }
+  }
+
+  // ---------- RESULTS ----------
+  function renderResults(){
+    let plus = 0, hold = 0, minus = 0;
+    answers.forEach(a => {
+      if(a.score === 1) plus++;
+      else if(a.score === 0) hold++;
+      else minus++;
+    });
+    const total = plus - minus;
+
+    document.getElementById('count-plus').textContent = plus;
+    document.getElementById('count-hold').textContent = hold;
+    document.getElementById('count-minus').textContent = minus;
+    document.getElementById('score-value').textContent = (total > 0 ? '+' : '') + total + ' / 10';
+
+    let text = '';
+    if(plus >= 7){
+      text = "You generally kept the conversation moving without ignoring the tension. You tended to combine directness with curiosity rather than reacting immediately.";
+    } else if(minus >= 5){
+      text = "Several of your responses addressed the issue quickly, but also increased defensiveness or tension. Notice where the impulse to defend, challenge, or regain control may be shaping the conversation.";
+    } else if(hold >= 5){
+      text = "You often prevented immediate escalation, but several decisions left the underlying issue untouched. Under pressure, delaying the difficult part can feel safe while allowing the problem to continue.";
+    } else {
+      text = "Your decisions shifted depending on the situation. In some moments you stayed curious and deliberate; in others, pressure pulled the response toward avoidance or escalation.";
+    }
+    document.getElementById('interpretation-text').textContent = text;
+
+    showScreen('screen-results');
+  }
+
+  // ---------- REVIEW ----------
+  function renderReview(){
+    const wrap = document.getElementById('review-list');
+    wrap.innerHTML = '';
+    answers.forEach((a, i) => {
+      let label = 'Constructive Response';
+      if(a.score === 0) label = 'Holding Response';
+      if(a.score === -1) label = 'Escalating Reaction';
+      const sign = a.score === 1 ? '+1' : (a.score === 0 ? '0' : '−1');
+
+      const item = document.createElement('div');
+      item.className = 'review-item';
+      item.innerHTML =
+        '<div class="review-num">Situation ' + String(i+1).padStart(2,'0') + ' · ' + a.title + '</div>' +
+        '<p class="review-dialogue">' + a.dialogue + '</p>' +
+        '<p class="review-chosen">You chose: ' + a.chosenText + '</p>' +
+        '<p class="review-consequence">' + a.consequence + '</p>' +
+        '<div class="indicator ' + (a.score===1?'plus':(a.score===0?'hold':'minus')) + '"><span class="dot"></span>' + sign + ' ' + label + '</div>';
+      wrap.appendChild(item);
+    });
+    showScreen('screen-review');
+  }
+
+  // ---------- EVENTS ----------
+  document.getElementById('btn-start').addEventListener('click', () => {
+    initRun();
+    renderScenario();
+  });
+  document.getElementById('btn-next').addEventListener('click', goNext);
+  document.getElementById('btn-review').addEventListener('click', renderReview);
+  document.getElementById('btn-back-results').addEventListener('click', () => showScreen('screen-results'));
+  document.getElementById('btn-restart').addEventListener('click', () => showScreen('screen-opening'));
+  document.getElementById('btn-restart-2').addEventListener('click', () => showScreen('screen-opening'));
+
+})();
+</script>
+</body>
+</html>
